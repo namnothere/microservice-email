@@ -1,28 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import Subscriber from './subscriber.enity';
-import { createSubscriberDto } from './createSubscriber.dto';
+import Kettle from './kettle.enity';
+import { createKettleDto } from './createKettle.dto';
 import { Repository } from 'typeorm';
 
-interface SubscribersResponse {
-    data: Subscriber[];
+interface KettlesResponse {
+    allCount: number;
+    kettles: Kettle[];
 }
 
 @Injectable()
-export class SubscribersService {
+export class KettlesService {
     constructor(
-        @InjectRepository(Subscriber)
-        private subscriberRepository: Repository<Subscriber>,
+        @InjectRepository(Kettle)
+        private subscriberRepository: Repository<Kettle>,
     ) {}
     
     // public async AddSubscriber(subscriber: createSubscriberDto): Promise<Subscriber> {
-    public async AddSubscriber(subscriber: createSubscriberDto): Promise<any> {
+    public async addKettle(subscriber: createKettleDto): Promise<any> {
         console.log("Call AddSubscriber in server");
         try {
             const newSubscriber = await this.subscriberRepository.create(subscriber);
             await this.subscriberRepository.save(newSubscriber);
             console.log(newSubscriber);
-            return newSubscriber as Subscriber;
+            return newSubscriber;
         } catch (err) {
             let data = JSON.parse(JSON.stringify(err));
             console.log(data.detail);
@@ -30,16 +31,25 @@ export class SubscribersService {
         }
     }
 
-    public async GetAllSubscribers() {
+    public async GetAllKettles() {
         const result = await this.subscriberRepository.find();
         
         if (result.length != 0) {
+            let total = 0;
+            result.forEach(element => {
+                total += element.count;
+            });
             console.log(result);
             return {
-                data: result
-            } as SubscribersResponse;
+                allCount: total,
+                kettles: result as Kettle[]
+            } as KettlesResponse;
+
         } else {
-            return {};
+            return {
+                allCount: 0,
+                kettles: []
+            } as KettlesResponse; 
         }
     }
 

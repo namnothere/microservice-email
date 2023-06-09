@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { SubscribersModule } from './subscribers/subscribers.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { KettlesModule } from './kettles/kettles.module';
 
 @Module({
   imports: [
@@ -11,14 +12,12 @@ import { ConfigModule } from '@nestjs/config';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'tiny.db.elephantsql.com',
-      // port: 5432,
       username: 'gyodqdjd',
       password: 'EQJzKu9SlQ1C0E0m2NxsEWCWZ4gcN2vl',
       database: 'gyodqdjd',
       autoLoadEntities: true,
-      synchronize: true,
     }),
-    SubscribersModule
+    SubscribersModule, KettlesModule
   ],
   controllers: [AppController],
   providers: [AppService],

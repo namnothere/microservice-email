@@ -6,7 +6,6 @@ import { SubscribersService } from './subscribers.service';
 @Controller()
 export class SubscribersController {
     constructor(
-        // @Inject('SUBSCRIBERS_PACKAGE')
         private readonly subscribersService: SubscribersService,
     ) {}
 
